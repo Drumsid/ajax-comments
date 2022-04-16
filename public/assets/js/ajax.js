@@ -16,7 +16,7 @@ $(document).ready(function () {
                             <div class="comment-text">' + item.comment + '</div>\
                             <div class="author-wrap">\
                                 <div><b>Author:</b> ' + item.author + '</div>\
-                                <div style="min-width: 180px"><b>Data: </b>' + item.updated_at + '</div>\
+                                <div><b>Data: </b>' + new Date(item.updated_at).toLocaleString() + '</div>\
                             </div>\
                         </div>');
                     });

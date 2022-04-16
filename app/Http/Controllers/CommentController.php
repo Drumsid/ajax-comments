@@ -23,8 +23,7 @@ class CommentController extends Controller
             'comment' => 'required|min:10|max:1020',
         ]);
 
-        if ($validator->fails())
-        {
+        if ($validator->fails()) {
             return response()->json([
                 'status'=>400,
                 'errors'=>$validator->messages()
@@ -44,16 +43,13 @@ class CommentController extends Controller
     public function destroy($id)
     {
         $comment = Comment::find($id);
-        if($comment)
-        {
+        if ($comment) {
             $comment->delete();
             return response()->json([
                 'status'=>200,
                 'message'=>'Comment Deleted Successfully.'
             ]);
-        }
-        else
-        {
+        } else {
             return response()->json([
                 'status'=>404,
                 'message'=>'No Comment Found.'

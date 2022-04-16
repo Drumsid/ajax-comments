@@ -60,7 +60,7 @@
             @csrf
             <ul id="save_msgList"></ul>
             <div class="mb-3">
-                <label for="nameField" class="form-label">Name</label>
+                <label for="nameField" class="form-label">Author</label>
                 <input type="text" name="author" class="form-control author" id="nameField" placeholder="enter you name">
             </div>
             <div class="mb-3">
