@@ -1,0 +1,54 @@
+version: '3.0'
+
+services:
+  nginx:
+    build:
+      context: ./docker/nginx
+    volumes:
+      - .:/project
+    container_name: ajax-comments-nginx
+    depends_on:
+      - php-fpm
+    restart: always
+    ports:
+      - "8086:80"
+
+  php-fpm:
+    build:
+      context: ./docker/php-fpm
+    volumes:
+      - .:/project
+    restart: always
+    container_name: ajax-comments-php-fpm
+    depends_on:
+      - postgres
+      - postgres-test
+
+  postgres:
+    container_name: ajax-comments-postgres
+    image: postgres:12
+    volumes:
+      - ./docker/postgres:/var/lib/postgresql/data
+    restart: always
+    environment:
+      POSTGRES_DB: test_db
+      POSTGRES_USER: test_user
+      POSTGRES_PASSWORD: secret
+    ports:
+        - "15432:5432"
+
+  postgres-test:
+      container_name: ajax-comments-postgres-test
+      image: postgres:12
+      volumes:
+          - ./docker/postgres_test:/var/lib/postgresql/data
+      restart: always
+      environment:
+          POSTGRES_DB: test_db-test
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: secret
+      ports:
+          - "25432:5432"
+
+
+
