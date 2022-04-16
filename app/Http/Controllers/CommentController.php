@@ -10,7 +10,7 @@ class CommentController extends Controller
 {
     public function getComments()
     {
-        $comments = Comment::all();
+        $comments = Comment::orderBy("created_at", 'desc')->get();
         return response()->json([
             'comments' => $comments,
             ]);
@@ -39,5 +39,25 @@ class CommentController extends Controller
             ]);
         }
 
+    }
+
+    public function destroy($id)
+    {
+        $comment = Comment::find($id);
+        if($comment)
+        {
+            $comment->delete();
+            return response()->json([
+                'status'=>200,
+                'message'=>'Comment Deleted Successfully.'
+            ]);
+        }
+        else
+        {
+            return response()->json([
+                'status'=>404,
+                'message'=>'No Comment Found.'
+            ]);
+        }
     }
 }

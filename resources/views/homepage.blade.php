@@ -2,6 +2,43 @@
 
 @section('content')
     <div class="container">
+
+        <div class="modal fade" id="CommentDeleteModal" tabindex="-1" aria-labelledby="CommentDeleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Delete comment?</p>
+                        <input type="hidden" id="modal-delete-comment-id">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-danger delete-comment-confirm">DELETE</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+{{--        костыль на время разработки удалять комменты--}}
+        @if(Auth::user())
+            <style>
+                .delete-comment-btn {
+                    display: inline-block;
+                    text-align: right;
+                }
+            </style>
+        @else
+            <style>
+                .delete-comment-btn {
+                    display: none;
+                }
+            </style>
+        @endif
+
+
         <h1>Comments page</h1>
         <div id="success_message"></div>
         <div>
