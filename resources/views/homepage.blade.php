@@ -55,7 +55,8 @@
             mauris nec laoreet consectetur.
         </div>
         <hr>
-        <h3>Comments</h3>
+        <h3>Add new comment</h3>
+        @if(Auth::user())
         <form action="{{ route("comments.store") }}" method="POST" id="addCommentForm">
             @csrf
             <ul id="save_msgList"></ul>
@@ -69,9 +70,17 @@
             </div>
             <button type="submit" class="btn btn-primary add-comment">Submit</button>
         </form>
+        @else
+            <p>Only auth users!</p>
+        @endif
         <hr>
+        <div class="d-flex justify-content-center">
+            <button id="loadMore" class="btn btn-primary d-none">Load More</button>
+        </div>
         <div class="comments-main-wrap" id="comments">
 
         </div>
+
+
     </div>
 @endsection

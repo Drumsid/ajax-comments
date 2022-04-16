@@ -1,18 +1,24 @@
 $(document).ready(function () {
     getComments();
-    function getComments()
-    {
+    function getComments() {
         $.ajax({
             type: "GET",
             url: "/comments",
             dataType: "json",
             success: function (response) {
-
-                if (response.comments.length > 0) {
+                // console.log(response.comments.length);
+                let lengthComments = response.comments.length;
+                if (lengthComments > 0) {
                     $('#comments').html("");
                     $.each(response.comments, function (key, item) {
-                        $('#comments').append('<div class="comment-wrap">\
-                    <button value="'+ item.id +'" class="btn btn-danger btn-sm delete-comment-btn" data-bs-toggle="modal" data-bs-target="#CommentDeleteModal">x</button>\
+                        // console.log(key);
+                        if (key <= 2) {
+                            key = "d-block";
+                        } else {
+                            key = "d-none";
+                        }
+                        $('#comments').append('<div class="comment-wrap ' + key + '">\
+                            <button value="'+ item.id +'" class="btn btn-danger btn-sm delete-comment-btn" data-bs-toggle="modal" data-bs-target="#CommentDeleteModal">x</button>\
                             <div class="comment-text">' + item.comment + '</div>\
                             <div class="author-wrap">\
                                 <div><b>Author:</b> ' + item.author + '</div>\
@@ -20,8 +26,15 @@ $(document).ready(function () {
                             </div>\
                         </div>');
                     });
+                    if (lengthComments > 3) {
+                        $("#loadMore").text("Load more").removeClass("d-none").removeClass("noContent");
+                    } else {
+                        $("#loadMore").addClass('d-none');
+                    }
+
                 } else {
                     $('#comments').html("No comments!");
+                    $("#loadMore").addClass('d-none');
                 }
             }
         });
@@ -91,5 +104,14 @@ $(document).ready(function () {
                 }
             }
         });
+    });
+
+
+    $(document).on('click', '#loadMore', function (e){
+        e.preventDefault();
+        $(".comment-wrap:hidden").slice(0, 3).removeClass("d-none").slideDown();
+        if($(".comment-wrap:hidden").length == 0) {
+            $("#loadMore").addClass('d-none');
+        }
     });
 });

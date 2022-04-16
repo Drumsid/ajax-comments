@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Validator;
 
 class CommentController extends Controller
 {
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getComments()
     {
         $comments = Comment::orderBy("created_at", 'desc')->get();
@@ -16,6 +19,11 @@ class CommentController extends Controller
             ]);
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -40,6 +48,10 @@ class CommentController extends Controller
 
     }
 
+    /**
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function destroy($id)
     {
         $comment = Comment::find($id);
