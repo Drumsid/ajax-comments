@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <h1>Comments page</h1>
+    <div class="container">
+        <h1>Comments page</h1>
+    </div>
 @endsection
