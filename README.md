@@ -15,13 +15,13 @@
 
 после сборки докер контейнеров, вводим по очереди в командной строке:
 
-`docker exec -it esvet-php-fpm composer install`
+`docker exec -it ajax-comments-php-fpm composer install`
 
 `cp -n .env.example .env || true`
 
 `php artisan key:generate`
 
-`docker exec -it esvet-php-fpm php artisan migrate`
+`docker exec -it ajax-comments-php-fpm php artisan migrate`
 
 
 Проверяем в браузере [localhost:8086](http://localhost:8086/)
