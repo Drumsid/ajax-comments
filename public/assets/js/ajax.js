@@ -6,12 +6,12 @@ $(document).ready(function () {
             url: "/comments",
             dataType: "json",
             success: function (response) {
-                // console.log(response.comments.length);
                 let lengthComments = response.comments.length;
                 if (lengthComments > 0) {
                     $('#comments').html("");
+                    $('.commentsCount').html("Comments count: " + lengthComments);
+
                     $.each(response.comments, function (key, item) {
-                        // console.log(key);
                         if (key <= 2) {
                             key = "d-block";
                         } else {
@@ -26,14 +26,15 @@ $(document).ready(function () {
                             </div>\
                         </div>');
                     });
+
                     if (lengthComments > 3) {
                         $("#loadMore").text("Load more").removeClass("d-none").removeClass("noContent");
                     } else {
                         $("#loadMore").addClass('d-none');
                     }
-
                 } else {
                     $('#comments').html("No comments!");
+                    $('.commentsCount').html("");
                     $("#loadMore").addClass('d-none');
                 }
             }

@@ -74,6 +74,7 @@
             <p>Only auth users!</p>
         @endif
         <hr>
+        <p class="commentsCount"></p>
         <div class="d-flex justify-content-center">
             <button id="loadMore" class="btn btn-primary d-none">Load More</button>
         </div>
