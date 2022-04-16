@@ -87,4 +87,5 @@
 </body>
 
 <script src="{{ asset('assets/js/ajax.js') }}" defer></script>
+<script src="{{ asset('assets/js/auth.js') }}" defer></script>
 </html>
