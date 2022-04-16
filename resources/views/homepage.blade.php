@@ -3,6 +3,7 @@
 @section('content')
     <div class="container">
         <h1>Comments page</h1>
+        <div id="success_message"></div>
         <div>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla id suscipit purus. Quisque luctus at magna
             ut consequat. In finibus dapibus enim nec ornare. Morbi in purus facilisis, rutrum urna sit amet, ultricies
@@ -18,19 +19,21 @@
         </div>
         <hr>
         <h3>Comments</h3>
-        <form>
+        <form action="{{ route("comments.store") }}" method="POST" id="addCommentForm">
+            @csrf
+            <ul id="save_msgList"></ul>
             <div class="mb-3">
                 <label for="nameField" class="form-label">Name</label>
-                <input type="text" class="form-control" id="nameField" placeholder="enter you name">
+                <input type="text" name="author" class="form-control author" id="nameField" placeholder="enter you name">
             </div>
             <div class="mb-3">
                 <label for="textareaField" class="form-label">Comment</label>
-                <textarea class="form-control" id="textareaField" rows="3" placeholder="enter you comment"></textarea>
+                <textarea name="comment" class="form-control comment" id="textareaField" rows="3" placeholder="enter you comment"></textarea>
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary add-comment">Submit</button>
         </form>
         <hr>
-        <div class="comments-wrap">
+        <div class="comments-main-wrap" id="comments">
 
         </div>
     </div>
