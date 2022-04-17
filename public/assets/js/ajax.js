@@ -1,21 +1,21 @@
 $(document).ready(function () {
 
     var paginate = 1;
-    console.log("Top paginate  = " + $(this).data('paginate'));
-    console.log("paginate top = " + paginate);
     loadMoreData(paginate);
 
     $('#load-more').click(function() {
         let page = $(this).data('paginate');
-        // console.log($(this));
-        console.log("Click paginate  = " + $(this).data('paginate'));
-        console.log("Click page  = " + page);
         loadMoreData(page);
         $(this).data('paginate', page + 1);
     });
 
+    function refreshPaginate() {
+        $("#load-more").data('paginate', 2);
+        $('#comments').html("");
+        loadMoreData(1);
+    }
+
     function loadMoreData(paginate) {
-        console.log("paginate in func = " + paginate);
         $.ajax({
             url: '/comments/?page=' + paginate,
             type: 'get',
@@ -25,18 +25,15 @@ $(document).ready(function () {
             }
         })
             .done(function(data) {
-                console.log("Count " + data.count);
-                console.log("==============");
+                $('.commentsCount').html("All comments: " + data.allCommentsCount); // тестирую чтоб понимать сколько всего в бд
                 if(data.count < 3) {
                     $('.no-more-comments').removeClass('invisible');
                     $('#load-more').hide();
-                    $('#comments').append(data.html);
-                    return;
                 } else {
                     $('.no-more-comments').addClass('invisible');
                     $('#load-more').show().text('Load more...');
-                    $('#comments').append(data.html);
                 }
+                $('#comments').append(data.html);
             })
             .fail(function(jqXHR, ajaxOptions, thrownError) {
                 alert('Something went wrong.');
@@ -61,7 +58,6 @@ $(document).ready(function () {
             data: data,
             dataType: "json",
             success: function (response) {
-                // console.log(response);
                 if (response.status == 400) {
                     $('#save_msgList').html("").addClass('alert alert-danger');
                     $.each(response.errors, function (key, err_value) {
@@ -74,10 +70,7 @@ $(document).ready(function () {
                     $('#addCommentForm').find('input').val('');
                     $('#addCommentForm').find('textarea').val('');
 
-                    $(this).data('paginate', 1);
-                    console.log("Create comment paginate =  " + paginate);
-                    $('#comments').html("");
-                    loadMoreData(paginate);
+                    refreshPaginate();
                 }
             }
         });
@@ -102,15 +95,13 @@ $(document).ready(function () {
             url: "/comments/" + id,
             dataType: "json",
             success: function (response) {
-                // console.log(response);
                 if (response.status == 404) {
 
                 } else {
                     $('#CommentDeleteModal').modal('hide');
 
-                    $(this).data('paginate', 1);
-                    $('#comments').html("");
-                    loadMoreData(paginate);
+                    refreshPaginate();
+
                 }
             }
         });

@@ -12,6 +12,8 @@ class CommentController extends Controller
 
     private $commentGenerate;
 
+    const PAGINATE_COUNT = 3;
+
     public function __construct(CommentGenerate $commentGenerate)
     {
         $this->commentGenerate = $commentGenerate;
@@ -19,13 +21,15 @@ class CommentController extends Controller
 
     public function getComments(Request $request)
     {
-        $comments = Comment::orderBy("created_at", 'desc')->paginate(3);
+        $comments = Comment::orderBy("created_at", 'desc')->paginate(self::PAGINATE_COUNT);
+        $allCommentsCount = Comment::all()->count();
         if ($request->ajax()) {
             $html = $this->commentGenerate->run($comments);
             return response()->json([
                 'status'=>200,
                 'html' => $html,
                 'count' => count($comments),
+                'allCommentsCount' => $allCommentsCount,
                 ]);
         }
         return response()->view("homepage");
