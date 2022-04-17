@@ -24,44 +24,19 @@
 
         <h1>Comments page</h1>
 
-        <div class="carusel">
+        <div class="carusel mt-5 mb-5">
+            <h2 class="mb-5">Random comments</h2>
             <div class="owl-carousel owl-theme">
-                <div class="item">
-                    <h4>1</h4>
+                @forelse($commentsSlider as $slide)
+                <div class="slide-item">
+                    <h4>Author: {{ $slide->author }}</h4>
+                    <p>Comment: {{ $slide->comment }}</p>
                 </div>
-                <div class="item">
-                    <h4>2</h4>
+                @empty
+                <div class="slide-item">
+                    There are no comments yet, but you can add them!
                 </div>
-                <div class="item">
-                    <h4>3</h4>
-                </div>
-                <div class="item">
-                    <h4>4</h4>
-                </div>
-                <div class="item">
-                    <h4>5</h4>
-                </div>
-                <div class="item">
-                    <h4>6</h4>
-                </div>
-                <div class="item">
-                    <h4>7</h4>
-                </div>
-                <div class="item">
-                    <h4>8</h4>
-                </div>
-                <div class="item">
-                    <h4>9</h4>
-                </div>
-                <div class="item">
-                    <h4>10</h4>
-                </div>
-                <div class="item">
-                    <h4>11</h4>
-                </div>
-                <div class="item">
-                    <h4>12</h4>
-                </div>
+                @endforelse
             </div>
         </div>
 

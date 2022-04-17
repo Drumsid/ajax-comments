@@ -14,4 +14,8 @@
     padding: 10px;
     border-radius: 2px;
 }
-
+.slide-item {
+    min-height: 150px;
+    background: #80808014;
+    padding: 10px;
+}
