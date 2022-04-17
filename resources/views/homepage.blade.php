@@ -22,23 +22,6 @@
         </div>
 
 
-{{--        костыль на время разработки удалять комменты--}}
-        @if(Auth::user())
-            <style>
-                .delete-comment-btn {
-                    display: inline-block;
-                    text-align: right;
-                }
-            </style>
-        @else
-            <style>
-                .delete-comment-btn {
-                    display: none;
-                }
-            </style>
-        @endif
-
-
         <h1>Comments page</h1>
         <div id="success_message"></div>
         <div>
@@ -75,9 +58,6 @@
         @endif
         <hr>
         <p class="commentsCount"></p>
-{{--        <div class="d-flex justify-content-center">--}}
-{{--            <button id="loadMore" class="btn btn-primary d-none">Load More</button>--}}
-{{--        </div>--}}
         <div class="text-center m-3">
             <button class="btn btn-primary" id="load-more" data-paginate="2">Load more...</button>
             <p class="no-more-comments invisible">No more comments...</p>
