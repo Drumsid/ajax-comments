@@ -26,3 +26,4 @@ Route::post('/comments', [CommentController::class, "store"])->name("comments.st
 Route::delete('/comments/{id}', [CommentController::class, "destroy"])->middleware('auth')->name("comments.delete");
 
 Route::get('/post', [TestController::class, 'post'])->name('post');
+//Route::get('/test', [TestController::class, 'getComments'])->name('getComments');

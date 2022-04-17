@@ -75,8 +75,12 @@
         @endif
         <hr>
         <p class="commentsCount"></p>
-        <div class="d-flex justify-content-center">
-            <button id="loadMore" class="btn btn-primary d-none">Load More</button>
+{{--        <div class="d-flex justify-content-center">--}}
+{{--            <button id="loadMore" class="btn btn-primary d-none">Load More</button>--}}
+{{--        </div>--}}
+        <div class="text-center m-3">
+            <button class="btn btn-primary" id="load-more" data-paginate="2">Load more...</button>
+            <p class="no-more-comments invisible">No more comments...</p>
         </div>
         <div class="comments-main-wrap" id="comments">
 

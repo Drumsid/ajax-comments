@@ -11,12 +11,38 @@ class CommentController extends Controller
     /**
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getComments()
+//    public function getComments()
+//    {
+//        $comments = Comment::orderBy("created_at", 'desc')->get();
+//        return response()->json([
+//            'comments' => $comments,
+//            ]);
+//    }
+
+    public function getComments(Request $request)
     {
-        $comments = Comment::orderBy("created_at", 'desc')->get();
-        return response()->json([
-            'comments' => $comments,
-            ]);
+        $comments = Comment::orderBy("created_at", 'desc')->paginate(3);
+        if ($request->ajax()) {
+            $html = '';
+
+            foreach ($comments as $comment) {
+                $html .= "<div class='comment-wrap'>
+                            <button value='{$comment->id}' class='btn btn-danger btn-sm delete-comment-btn' data-bs-toggle='modal'
+                data-bs-target='#CommentDeleteModal'>x</button>
+                            <div class='comment-text'>{$comment->comment}</div>
+                            <div class='author-wrap'>
+                                <div><b>Author:</b> {$comment->author}</div>
+                                <div><b>Data: </b> {$comment->updated_at}</div>
+                            </div>
+                        </div>";
+            }
+
+            return response()->json([
+                'status'=>200,
+                'html' => $html,
+                'count' => count($comments),
+                ]);
+        }
     }
 
     /**

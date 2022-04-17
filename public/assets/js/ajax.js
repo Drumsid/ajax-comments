@@ -1,44 +1,87 @@
 $(document).ready(function () {
-    getComments();
-    function getComments() {
+    // getComments();
+    // function getComments() {
+    //     $.ajax({
+    //         type: "GET",
+    //         url: "/comments",
+    //         dataType: "json",
+    //         success: function (response) {
+    //             let lengthComments = response.comments.length;
+    //             if (lengthComments > 0) {
+    //                 $('#comments').html("");
+    //                 $('.commentsCount').html("Comments count: " + lengthComments);
+    //
+    //                 $.each(response.comments, function (key, item) {
+    //                     if (key <= 2) {
+    //                         key = "d-block";
+    //                     } else {
+    //                         key = "d-none";
+    //                     }
+    //                     $('#comments').append('<div class="comment-wrap ' + key + '">\
+    //                         <button value="'+ item.id +'" class="btn btn-danger btn-sm delete-comment-btn" data-bs-toggle="modal" data-bs-target="#CommentDeleteModal">x</button>\
+    //                         <div class="comment-text">' + item.comment + '</div>\
+    //                         <div class="author-wrap">\
+    //                             <div><b>Author:</b> ' + item.author + '</div>\
+    //                             <div><b>Data: </b>' + new Date(item.updated_at).toLocaleString() + '</div>\
+    //                         </div>\
+    //                     </div>');
+    //                 });
+    //
+    //                 if (lengthComments > 3) {
+    //                     $("#loadMore").text("Load more").removeClass("d-none").removeClass("noContent");
+    //                 } else {
+    //                     $("#loadMore").addClass('d-none');
+    //                 }
+    //             } else {
+    //                 $('#comments').html("No comments!");
+    //                 $('.commentsCount').html("");
+    //                 $("#loadMore").addClass('d-none');
+    //             }
+    //         }
+    //     });
+    // }
+
+    var paginate = 1;
+    console.log("Top paginate  = " + $(this).data('paginate'));
+    console.log("paginate top = " + paginate);
+    loadMoreData(paginate);
+
+    $('#load-more').click(function() {
+        let page = $(this).data('paginate');
+        // console.log($(this));
+        console.log("Click paginate  = " + $(this).data('paginate'));
+        console.log("Click page  = " + page);
+        loadMoreData(page);
+        $(this).data('paginate', page + 1);
+    });
+
+    function loadMoreData(paginate) {
+        console.log("paginate in func = " + paginate);
         $.ajax({
-            type: "GET",
-            url: "/comments",
-            dataType: "json",
-            success: function (response) {
-                let lengthComments = response.comments.length;
-                if (lengthComments > 0) {
-                    $('#comments').html("");
-                    $('.commentsCount').html("Comments count: " + lengthComments);
-
-                    $.each(response.comments, function (key, item) {
-                        if (key <= 2) {
-                            key = "d-block";
-                        } else {
-                            key = "d-none";
-                        }
-                        $('#comments').append('<div class="comment-wrap ' + key + '">\
-                            <button value="'+ item.id +'" class="btn btn-danger btn-sm delete-comment-btn" data-bs-toggle="modal" data-bs-target="#CommentDeleteModal">x</button>\
-                            <div class="comment-text">' + item.comment + '</div>\
-                            <div class="author-wrap">\
-                                <div><b>Author:</b> ' + item.author + '</div>\
-                                <div><b>Data: </b>' + new Date(item.updated_at).toLocaleString() + '</div>\
-                            </div>\
-                        </div>');
-                    });
-
-                    if (lengthComments > 3) {
-                        $("#loadMore").text("Load more").removeClass("d-none").removeClass("noContent");
-                    } else {
-                        $("#loadMore").addClass('d-none');
-                    }
-                } else {
-                    $('#comments').html("No comments!");
-                    $('.commentsCount').html("");
-                    $("#loadMore").addClass('d-none');
-                }
+            url: '/comments/?page=' + paginate,
+            type: 'get',
+            datatype: 'html',
+            beforeSend: function() {
+                $('#load-more').text('Loading...');
             }
-        });
+        })
+            .done(function(data) {
+                console.log("Count " + data.count);
+                console.log("==============");
+                if(data.count < 3) {
+                    $('.no-more-comments').removeClass('invisible');
+                    $('#load-more').hide();
+                    $('#comments').append(data.html);
+                    return;
+                } else {
+                    $('.no-more-comments').addClass('invisible');
+                    $('#load-more').show().text('Load more...');
+                    $('#comments').append(data.html);
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                alert('Something went wrong.');
+            });
     }
 
     $(document).on('click', '.add-comment', function (e) {
@@ -71,7 +114,11 @@ $(document).ready(function () {
                         .text(response.message).delay(3000).fadeOut(350);
                     $('#addCommentForm').find('input').val('');
                     $('#addCommentForm').find('textarea').val('');
-                    getComments();
+
+                    $(this).data('paginate', 1);
+                    console.log("Create comment paginate =  " + paginate);
+                    $('#comments').html("");
+                    loadMoreData(paginate);
                 }
             }
         });
@@ -101,18 +148,21 @@ $(document).ready(function () {
 
                 } else {
                     $('#CommentDeleteModal').modal('hide');
-                    getComments();
+
+                    $(this).data('paginate', 1);
+                    $('#comments').html("");
+                    loadMoreData(paginate);
                 }
             }
         });
     });
+    // console.log("paginate_d " + paginate);
 
-
-    $(document).on('click', '#loadMore', function (e){
-        e.preventDefault();
-        $(".comment-wrap:hidden").slice(0, 3).removeClass("d-none").slideDown();
-        if($(".comment-wrap:hidden").length == 0) {
-            $("#loadMore").addClass('d-none');
-        }
-    });
+    // $(document).on('click', '#loadMore', function (e){
+    //     e.preventDefault();
+    //     $(".comment-wrap:hidden").slice(0, 3).removeClass("d-none").slideDown();
+    //     if($(".comment-wrap:hidden").length == 0) {
+    //         $("#loadMore").addClass('d-none');
+    //     }
+    // });
 });
