@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CommentController;
-use App\Http\Controllers\TestController;
+use App\Http\Controllers\AjaxSearchController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,3 +26,5 @@ Route::post('/comments', [CommentController::class, "store"])->name("comments.st
 Route::delete('/comments/{id}', [CommentController::class, "destroy"])->middleware('auth')->name("comments.delete");
 Route::get('/sliders', [CommentController::class, "getSliders"])->name("sliders.index");
 
+Route::post('/search', [AjaxSearchController::class, 'search'])->name("search");
+Route::post('/ajax-search', [AjaxSearchController::class, 'ajaxSearch'])->name("ajax-search");

@@ -24,6 +24,15 @@
         <div id="success_message"></div>
         <h1>Comments page</h1>
 
+        <div class="search_box">
+            <form action="{{ route("search") }}" method="POST">
+                @csrf
+                <input autocomplete="off" type="text" name="search" id="search" placeholder="Print author name">
+                <input type="submit">
+            </form>
+            <div id="search_box-result"></div>
+        </div>
+
         <div class="carusel mt-5 mb-5">
             <h2 class="mb-5">Random comments</h2>
             <div id="owlCarousel" class="owl-carousel owl-theme"></div>
