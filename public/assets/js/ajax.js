@@ -2,6 +2,7 @@ $(document).ready(function () {
 
     var paginate = 1;
     loadMoreData(paginate);
+    loadSliders();
 
     $('#load-more').click(function() {
         let page = $(this).data('paginate');
@@ -71,6 +72,7 @@ $(document).ready(function () {
                     $('#addCommentForm').find('textarea').val('');
 
                     refreshPaginate();
+                    loadSliders();
                 }
             }
         });
@@ -101,9 +103,39 @@ $(document).ready(function () {
                     $('#CommentDeleteModal').modal('hide');
 
                     refreshPaginate();
+                    loadSliders();
 
                 }
             }
         });
     });
+
+    function loadSliders() {
+        $.ajax({
+            url: '/sliders',
+            type: 'get',
+            datatype: 'html',
+            beforeSend: function() {
+                $('#load-more').text('Loading...');
+                }
+            })
+            .done(function(data) {
+                $('#owlCarousel').html("").append(data.html);
+
+                var owl = $('.owl-carousel');
+                owl.trigger('destroy.owl.carousel');
+                owl.owlCarousel({
+                    items: 2,
+                    loop: true,
+                    margin: 10,
+                    autoplay: true,
+                    autoplayTimeout: 3000,
+                    autoplayHoverPause: true
+                });
+                owl.trigger('refresh.owl.carousel');
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                alert('Something went wrong.');
+            });
+    }
 });

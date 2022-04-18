@@ -19,6 +19,31 @@ class CommentController extends Controller
         $this->commentGenerate = $commentGenerate;
     }
 
+    public function getSliders(Request $request)
+    {
+        if ($request->ajax()) {
+            $commentsCount = Comment::all()->count();
+            if ($commentsCount < 5) {
+                $commentsSlider =  Comment::all()->random($commentsCount);
+            } else {
+                $commentsSlider =  Comment::all()->random(5);
+            }
+
+            $html = "";
+            foreach ($commentsSlider as $slide) {
+                $html .= "<div class='slide-item'>
+                        <h4>Author: $slide->author</h4>
+                        <p>Comment: $slide->comment</p>
+                    </div>";
+            }
+            return response()->json([
+                'status'=>200,
+                'html' => $html,
+            ]);
+        }
+
+    }
+
     public function getComments(Request $request)
     {
         $comments = Comment::orderBy("created_at", 'desc')->paginate(self::PAGINATE_COUNT);

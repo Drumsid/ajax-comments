@@ -21,26 +21,15 @@
             </div>
         </div>
 
-
+        <div id="success_message"></div>
         <h1>Comments page</h1>
 
         <div class="carusel mt-5 mb-5">
             <h2 class="mb-5">Random comments</h2>
-            <div class="owl-carousel owl-theme">
-                @forelse($commentsSlider as $slide)
-                <div class="slide-item">
-                    <h4>Author: {{ $slide->author }}</h4>
-                    <p>Comment: {{ $slide->comment }}</p>
-                </div>
-                @empty
-                <div class="slide-item">
-                    There are no comments yet, but you can add them!
-                </div>
-                @endforelse
-            </div>
+            <div id="owlCarousel" class="owl-carousel owl-theme"></div>
         </div>
 
-        <div id="success_message"></div>
+
         <div>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla id suscipit purus. Quisque luctus at magna
             ut consequat. In finibus dapibus enim nec ornare. Morbi in purus facilisis, rutrum urna sit amet, ultricies
