@@ -24,20 +24,10 @@
         <div id="success_message"></div>
         <h1>Comments page</h1>
 
-        <div class="search_box">
-            <form action="{{ route("search") }}" method="POST">
-                @csrf
-                <input autocomplete="off" type="text" name="search" id="search" placeholder="Print author name">
-                <input type="submit">
-            </form>
-            <div id="search_box-result"></div>
-        </div>
-
         <div class="carusel mt-5 mb-5">
             <h2 class="mb-5">Random comments</h2>
             <div id="owlCarousel" class="owl-carousel owl-theme"></div>
         </div>
-
 
         <div>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla id suscipit purus. Quisque luctus at magna
@@ -73,6 +63,20 @@
         @endif
         <hr>
         <p class="commentsCount"></p>
+
+        <div class="search_box">
+            <h6>Search for author</h6>
+            <form id="search_form" action="{{ route("search") }}" method="POST">
+                @csrf
+                <input autocomplete="off" type="text" name="search" id="search" placeholder="Print author name">
+                <input id="searchSubmit" type="submit" value="submit">
+            </form>
+            <div id="search_box-result"></div>
+            <div class="clear-filter d-none">
+                <a class="btn btn-danger btn-sm mt-5" href="{{route("homepage")}}">Clear Filter</a>
+            </div>
+        </div>
+
         <div class="text-center m-3">
             <button class="btn btn-primary" id="load-more" data-paginate="2">Load more...</button>
             <p class="no-more-comments invisible">No more comments...</p>

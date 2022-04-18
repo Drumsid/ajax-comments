@@ -89,51 +89,5 @@
 </body>
 
 <script src="{{ asset('assets/js/ajax.js') }}" defer></script>
-<script>
-    $(document).ready(function() {
-        var $result = $('#search_box-result');
-
-        $('#search').on('keyup', function(){
-            var search = $(this).val();
-            if ((search != '') && (search.length > 2)){
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-                $.ajax({
-                    type: "POST",
-                    url: "/ajax-search",
-                    data: {'search': search},
-                    success: function(response){
-                        $result.html(response.html);
-                        if(response.html != ''){
-                            $result.fadeIn();
-                        } else {
-                            $result.fadeOut(100);
-                        }
-                    }
-                });
-            } else {
-                $result.html('');
-                $result.fadeOut(100);
-            }
-        });
-
-        $(document).on('click', function(e){
-            if (!$(e.target).closest('.search_box').length){
-                $result.html('');
-                $result.fadeOut(100);
-            }
-        });
-
-        $(document).on('click', '.search_result-name a', function(){
-            $('#search').val($(this).text());
-            $result.fadeOut(100);
-            return false;
-        });
-
-
-    });
-</script>
+<script src="{{ asset('assets/js/ajax-search.js') }}" defer></script>
 </html>

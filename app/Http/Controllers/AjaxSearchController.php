@@ -3,10 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\Comment;
+use App\Services\Comments\CommentGenerate;
+use App\Services\Sliders\SlidersGenerate;
 use Illuminate\Http\Request;
 
 class AjaxSearchController extends Controller
 {
+    private $commentGenerate;
+
+    public function __construct(CommentGenerate $commentGenerate)
+    {
+        $this->commentGenerate = $commentGenerate;
+    }
     public function ajaxSearch(Request $request)
     {
 
@@ -29,6 +37,25 @@ class AjaxSearchController extends Controller
         }
         return response()->json([
             'html' => "error"
+        ]);
+    }
+
+    public function search(Request $request)
+    {
+        if ($request->ajax()) {
+            $search = $request->search;
+            if ($search) {
+                $result = Comment::query()->where('author', 'LIKE', "%{$search}%")->get();
+                $html = $this->commentGenerate->run($result);
+                return response()->json([
+                    'html' => $html,
+                ]);
+            }
+        }
+
+        return response()->json([
+            'html' => "error empty",
+            'status' => 400,
         ]);
     }
 }

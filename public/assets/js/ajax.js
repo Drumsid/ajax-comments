@@ -73,6 +73,7 @@ $(document).ready(function () {
 
                     refreshPaginate();
                     loadSliders();
+                    $('.clear-filter').hide();
                 }
             }
         });
@@ -104,7 +105,7 @@ $(document).ready(function () {
 
                     refreshPaginate();
                     loadSliders();
-
+                    $('.clear-filter').hide();
                 }
             }
         });
