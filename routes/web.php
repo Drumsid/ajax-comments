@@ -26,4 +26,3 @@ Route::post('/comments', [CommentController::class, "store"])->name("comments.st
 Route::delete('/comments/{id}', [CommentController::class, "destroy"])->middleware('auth')->name("comments.delete");
 Route::get('/sliders', [CommentController::class, "getSliders"])->name("sliders.index");
 
-Route::get('/post', [TestController::class, 'post'])->name('post');
