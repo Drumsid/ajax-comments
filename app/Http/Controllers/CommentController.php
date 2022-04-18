@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\Comments\CommentGenerate;
+use App\Services\Sliders\SlidersGenerate;
 use Illuminate\Http\Request;
 use App\Models\Comment;
 use Illuminate\Support\Facades\Validator;
@@ -11,37 +12,39 @@ class CommentController extends Controller
 {
 
     private $commentGenerate;
+    private $slidersGenerate;
 
     const PAGINATE_COUNT = 3;
 
-    public function __construct(CommentGenerate $commentGenerate)
+    const SLIDERS_COUNT = 5;
+
+    public function __construct(
+        CommentGenerate $commentGenerate,
+        SlidersGenerate $slidersGenerate)
     {
         $this->commentGenerate = $commentGenerate;
+        $this->slidersGenerate = $slidersGenerate;
     }
 
     public function getSliders(Request $request)
     {
         if ($request->ajax()) {
             $commentsCount = Comment::all()->count();
-            if ($commentsCount < 5) {
-                $commentsSlider =  Comment::all()->random($commentsCount);
+            if ($commentsCount < self::SLIDERS_COUNT) {
+                $comments =  Comment::all()->random($commentsCount);
             } else {
-                $commentsSlider =  Comment::all()->random(5);
+                $comments =  Comment::all()->random(self::SLIDERS_COUNT);
             }
 
-            $html = "";
-            foreach ($commentsSlider as $slide) {
-                $html .= "<div class='slide-item'>
-                        <h4>Author: $slide->author</h4>
-                        <p>Comment: $slide->comment</p>
-                    </div>";
-            }
+            $html = $this->slidersGenerate->run($comments);
             return response()->json([
                 'status'=>200,
                 'html' => $html,
+                'commentsCount' => $commentsCount,
+                'comments' => $comments,
             ]);
         }
-
+        return response()->view("homepage");
     }
 
     public function getComments(Request $request)
