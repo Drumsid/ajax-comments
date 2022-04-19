@@ -20,7 +20,7 @@ class AjaxSearchController extends Controller
 
         if ($request->ajax()) {
             $search = $request->search;
-            $result = Comment::query()->where('author', 'LIKE', "%{$search}%")->pluck("author");
+            $result = Comment::getColumnData($search);
             $html = "";
             if (count($result) >= 1) {
                 foreach ($result as $item) {
@@ -33,6 +33,7 @@ class AjaxSearchController extends Controller
             }
             return response()->json([
                 'html' => $html,
+                'status' => 200,
             ]);
         }
         return response()->json([
@@ -45,10 +46,11 @@ class AjaxSearchController extends Controller
         if ($request->ajax()) {
             $search = $request->search;
             if ($search) {
-                $result = Comment::query()->where('author', 'LIKE', "%{$search}%")->get();
+                $result = Comment::search($search);
                 $html = $this->commentGenerate->run($result);
                 return response()->json([
                     'html' => $html,
+                    'status' => 200,
                 ]);
             }
         }

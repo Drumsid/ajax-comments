@@ -18,6 +18,10 @@ class CommentController extends Controller
 
     const SLIDERS_COUNT = 5;
 
+    /**
+     * @param CommentGenerate $commentGenerate
+     * @param SlidersGenerate $slidersGenerate
+     */
     public function __construct(
         CommentGenerate $commentGenerate,
         SlidersGenerate $slidersGenerate)
@@ -26,6 +30,10 @@ class CommentController extends Controller
         $this->slidersGenerate = $slidersGenerate;
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
+     */
     public function getSliders(Request $request)
     {
         if ($request->ajax()) {
@@ -47,6 +55,10 @@ class CommentController extends Controller
         return response()->view("homepage");
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
+     */
     public function getComments(Request $request)
     {
         $comments = Comment::orderBy("created_at", 'desc')->paginate(self::PAGINATE_COUNT);
