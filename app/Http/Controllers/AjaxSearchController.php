@@ -4,17 +4,34 @@ namespace App\Http\Controllers;
 
 use App\Models\Comment;
 use App\Services\Comments\CommentGenerate;
-use App\Services\Sliders\SlidersGenerate;
+use App\Services\Search\HintsGenerate;
 use Illuminate\Http\Request;
 
 class AjaxSearchController extends Controller
 {
+    /**
+     * @var CommentGenerate
+     */
     private $commentGenerate;
+    /**
+     * @var HintsGenerate
+     */
+    private $hintsGenerate;
 
-    public function __construct(CommentGenerate $commentGenerate)
+    /**
+     * @param CommentGenerate $commentGenerate
+     * @param HintsGenerate $hintsGenerate
+     */
+    public function __construct(CommentGenerate $commentGenerate, HintsGenerate $hintsGenerate)
     {
         $this->commentGenerate = $commentGenerate;
+        $this->hintsGenerate = $hintsGenerate;
     }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function ajaxSearch(Request $request)
     {
 
@@ -23,13 +40,7 @@ class AjaxSearchController extends Controller
             $result = Comment::getColumnData($search);
             $html = "";
             if (count($result) >= 1) {
-                foreach ($result as $item) {
-                    $html .= "<div  class='d-flex justify-content-between align-items-center mt-3' style='width: 25%;'>
-                                <div class='search_result-name'>
-                                    <a href='#'>$item</a>
-                                </div>
-                            </div>";
-                }
+                $html = $this->hintsGenerate->run($result);
             }
             return response()->json([
                 'html' => $html,
@@ -37,10 +48,15 @@ class AjaxSearchController extends Controller
             ]);
         }
         return response()->json([
-            'html' => "error"
+            'html' => "error",
+            'status' => 400,
         ]);
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function search(Request $request)
     {
         if ($request->ajax()) {
