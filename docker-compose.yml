@@ -22,7 +22,6 @@ services:
     container_name: ajax-comments-php-fpm
     depends_on:
       - postgres
-      - postgres-test
 
   postgres:
     container_name: ajax-comments-postgres
@@ -37,18 +36,6 @@ services:
     ports:
         - "15432:5432"
 
-  postgres-test:
-      container_name: ajax-comments-postgres-test
-      image: postgres:12
-      volumes:
-          - ./docker/postgres_test:/var/lib/postgresql/data
-      restart: always
-      environment:
-          POSTGRES_DB: test_db-test
-          POSTGRES_USER: test_user
-          POSTGRES_PASSWORD: secret
-      ports:
-          - "25432:5432"
 
 
 
