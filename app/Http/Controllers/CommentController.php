@@ -2,21 +2,77 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\Comments\CommentGenerate;
+use App\Services\Sliders\SlidersGenerate;
 use Illuminate\Http\Request;
 use App\Models\Comment;
 use Illuminate\Support\Facades\Validator;
 
 class CommentController extends Controller
 {
+
+    private $commentGenerate;
+    private $slidersGenerate;
+
+    const PAGINATE_COUNT = 3;
+
+    const SLIDERS_COUNT = 5;
+
     /**
-     * @return \Illuminate\Http\JsonResponse
+     * @param CommentGenerate $commentGenerate
+     * @param SlidersGenerate $slidersGenerate
      */
-    public function getComments()
+    public function __construct(
+        CommentGenerate $commentGenerate,
+        SlidersGenerate $slidersGenerate)
     {
-        $comments = Comment::orderBy("created_at", 'desc')->get();
-        return response()->json([
-            'comments' => $comments,
+        $this->commentGenerate = $commentGenerate;
+        $this->slidersGenerate = $slidersGenerate;
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
+     */
+    public function getSliders(Request $request)
+    {
+        if ($request->ajax()) {
+            $commentsCount = Comment::all()->count();
+            if ($commentsCount < self::SLIDERS_COUNT) {
+                $comments =  Comment::all()->random($commentsCount);
+            } else {
+                $comments =  Comment::all()->random(self::SLIDERS_COUNT);
+            }
+
+            $html = $this->slidersGenerate->run($comments);
+            return response()->json([
+                'status'=>200,
+                'html' => $html,
+                'commentsCount' => $commentsCount,
+                'comments' => $comments,
             ]);
+        }
+        return response()->view("homepage");
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
+     */
+    public function getComments(Request $request)
+    {
+        $comments = Comment::orderBy("created_at", 'desc')->paginate(self::PAGINATE_COUNT);
+        $allCommentsCount = Comment::all()->count();
+        if ($request->ajax()) {
+            $html = $this->commentGenerate->run($comments);
+            return response()->json([
+                'status'=>200,
+                'html' => $html,
+                'count' => count($comments),
+                'allCommentsCount' => $allCommentsCount,
+                ]);
+        }
+        return response()->view("homepage");
     }
 
     /**

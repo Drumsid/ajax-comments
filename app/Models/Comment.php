@@ -12,4 +12,18 @@ class Comment extends Model
     protected $fillable = [
         'author', 'comment'
     ];
+
+    public static function getColumnData($search, $column = 'author')
+    {
+        return Comment::query()
+            ->where($column, 'LIKE', "%{$search}%")
+            ->pluck($column);
+    }
+
+    public static function search($search, $column = 'author')
+    {
+        return Comment::query()
+            ->where($column, 'LIKE', "%{$search}%")
+            ->get();
+    }
 }

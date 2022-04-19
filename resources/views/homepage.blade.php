@@ -21,26 +21,14 @@
             </div>
         </div>
 
-
-{{--        костыль на время разработки удалять комменты--}}
-        @if(Auth::user())
-            <style>
-                .delete-comment-btn {
-                    display: inline-block;
-                    text-align: right;
-                }
-            </style>
-        @else
-            <style>
-                .delete-comment-btn {
-                    display: none;
-                }
-            </style>
-        @endif
-
-
-        <h1>Comments page</h1>
         <div id="success_message"></div>
+        <h1>Comments page</h1>
+
+        <div class="carusel mt-5 mb-5">
+            <h2 class="mb-5">Random comments</h2>
+            <div id="owlCarousel" class="owl-carousel owl-theme"></div>
+        </div>
+
         <div>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla id suscipit purus. Quisque luctus at magna
             ut consequat. In finibus dapibus enim nec ornare. Morbi in purus facilisis, rutrum urna sit amet, ultricies
@@ -75,8 +63,23 @@
         @endif
         <hr>
         <p class="commentsCount"></p>
-        <div class="d-flex justify-content-center">
-            <button id="loadMore" class="btn btn-primary d-none">Load More</button>
+
+        <div class="search_box">
+            <h6>Search for author</h6>
+            <form id="search_form" action="{{ route("search") }}" method="POST">
+                @csrf
+                <input autocomplete="off" type="text" name="search" id="search" placeholder="Print author name">
+                <input id="searchSubmit" type="submit" value="submit">
+            </form>
+            <div id="search_box-result"></div>
+            <div class="clear-filter d-none">
+                <a class="btn btn-danger btn-sm mt-5" href="{{route("homepage")}}">Clear Filter</a>
+            </div>
+        </div>
+
+        <div class="text-center m-3">
+            <button class="btn btn-primary" id="load-more" data-paginate="2">Load more...</button>
+            <p class="no-more-comments invisible">No more comments...</p>
         </div>
         <div class="comments-main-wrap" id="comments">
 
