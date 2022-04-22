@@ -17,13 +17,13 @@ class Comment extends Model
     {
         return Comment::query()
             ->where($column, 'LIKE', "%{$search}%")
-            ->pluck($column);
+            ->pluck($column)->unique();
     }
 
     public static function search($search, $column = 'author')
     {
         return Comment::query()
-            ->where($column, 'LIKE', "%{$search}%")
+            ->where($column, $search)
             ->get();
     }
 }

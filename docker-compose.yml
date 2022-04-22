@@ -9,7 +9,7 @@ services:
     container_name: ajax-comments-nginx
     depends_on:
       - php-fpm
-    restart: always
+#    restart: always
     ports:
       - "8086:80"
 
@@ -18,7 +18,7 @@ services:
       context: ./docker/php-fpm
     volumes:
       - .:/project
-    restart: always
+#    restart: always
     container_name: ajax-comments-php-fpm
     depends_on:
       - postgres
@@ -28,7 +28,7 @@ services:
     image: postgres:12
     volumes:
       - ./docker/postgres:/var/lib/postgresql/data
-    restart: always
+#    restart: always
     environment:
       POSTGRES_DB: test_db
       POSTGRES_USER: test_user
